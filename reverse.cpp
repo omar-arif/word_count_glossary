@@ -47,6 +47,7 @@ class Glossaire {
                 string sub_word;
                 while (getline(iss, sub_word, '\'')){
 
+                    // interrupt and output error if a current word has more than 64 characters
                     if (sub_word.length() > 64){
                         cerr << "Error: The word: " << sub_word << " contains more than 64 characters";
                         return -1;
