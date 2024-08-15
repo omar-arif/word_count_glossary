@@ -10,7 +10,9 @@ using namespace std;
 
 class Glossaire {
         
+        // input path
         const string &input_path;
+        // an unordered map for minimal search and insertion complexity
         unordered_map<string, int> map;
     
     public:
@@ -32,7 +34,7 @@ class Glossaire {
             }
 
             // A string containing all the characters that we allow a word to have
-            string allowed_chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789éèêàâëûùîçôöü-'";
+            string allowed_chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789éèêàâëûùîçôöü-";
 
             // Read each word of the stream
             string word;
