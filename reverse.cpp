@@ -47,8 +47,13 @@ class Glossaire {
                 string sub_word;
                 while (getline(iss, sub_word, '\'')){
 
+                    if (sub_word.length() > 64){
+                        cerr << "Error: The word: " << sub_word << " contains more than 64 characters";
+                        return -1;
+                    }
+
                     // check if a word is of length less than 2 or if a word contains an unallowed character
-                    if (sub_word.length() >= 2 && sub_word.find_first_not_of(allowed_chars) == string::npos) {
+                    else if (sub_word.length() >= 2 && sub_word.find_first_not_of(allowed_chars) == string::npos) {
                         
                         // if the word that is read is not in the unordered map, we add it to it as key with value 0
                         if (this->map.find(sub_word) == this->map.end()) {
