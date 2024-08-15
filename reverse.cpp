@@ -4,6 +4,7 @@
 #include <vector>
 #include <fstream>
 #include <algorithm>
+#include <sstream>
 
 using namespace std;
 
@@ -30,26 +31,35 @@ class Glossaire {
                 return -1;
             }
 
+            // A string containing all the characters that we allow a word to have
+            string allowed_chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789éèêàâëûùîçôöü-";
+
             // Read each word of the stream
             string word;
-            // A string containing all the characters that we allow a word to have
-            string allowed_chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789éèêàâëûùîçôöü'-";
             while (InputStream >> word) {
+                
+                // use the current word a string stream
+                istringstream iss(word);
+                
+                // get every subword using the "'" (apostrophe) delimiter
+                string sub_word;
+                while (getline(iss, sub_word, '\'')){
 
-                // check if 
-                if (word.length()==1 || word.find_first_not_of(allowed_chars)!= string::npos) {
-                    break;
+                    // check if a word is of length less than 2 or if a word contains an unallowed character
+                    if (sub_word.length()==1 || sub_word.find_first_not_of(allowed_chars)!= string::npos) {
+                        break;
+                    }
+
+
+                    // if the word that is read is not in the unordered map, we add it to it as key with value 0
+                    if (this->map.find(sub_word) == this->map.end()) {
+                        this->map[sub_word] == 0;
+                    }
+
+                    // increment the current word count
+                    this->map[sub_word]++;
                 }
-
-                // if the word that is read is not in the unordered map, we add it to it as key with value 0
-                if (this->map.find(word) == this->map.end()) {
-                    this->map[word] == 0;
-                }
-
-                // increment the current word count
-                this->map[word]++;
             }
-
             // Closing the file after completion
             InputStream.close();
             return 0;
@@ -58,7 +68,7 @@ class Glossaire {
         // comparator to use for sorting (key,value) pairs by their value
         static bool comparator(const pair<string, int> &p1, const pair<string, int> &p2) {return p1.second > p2.second;}
 
-        // method that copies the pair value of the unordered map into a vector in order to sort these pairs
+        // method that copies the pairs of the unordered map into a vector in order to sort these pairs
         void sort_results(vector<pair<string, int>> &v) {
             
             // clear contents of vector in case if not empty
@@ -73,6 +83,7 @@ class Glossaire {
             sort(v.begin(), v.end(), this->comparator);
         }
 
+        // A method that creates a file based on the input file path and writes the glossary resluts in a formated way ("word, word count" in each line)
         int write_to_output() {
 
             // get the postion of the "." caracter at the end of the input file
