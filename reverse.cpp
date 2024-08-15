@@ -48,7 +48,7 @@ class Glossaire {
                 while (getline(iss, sub_word, '\'')){
 
                     // check if a word is of length less than 2 or if a word contains an unallowed character
-                    if (sub_word.length()!=1 && sub_word.find_first_not_of(allowed_chars)== string::npos) {
+                    if (sub_word.length() >= 2 && sub_word.find_first_not_of(allowed_chars) == string::npos) {
                         
                         // if the word that is read is not in the unordered map, we add it to it as key with value 0
                         if (this->map.find(sub_word) == this->map.end()) {
@@ -92,7 +92,7 @@ class Glossaire {
             string suffix(".table.txt");
             
             // create the output path by concatenating the input path (minus the extenstion) and the suffix ".table.txt"
-            string outut_path = this->input_path.substr(0,dot) + suffix;
+            string outut_path = this->input_path.substr(0, dot) + suffix;
             
             // create and open a new file
             ofstream OutputStream(outut_path);
