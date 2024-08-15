@@ -1,7 +1,9 @@
 #include <iostream>
 #include <string>
 #include <unordered_map>
+#include <vector>
 #include <fstream>
+#include <algorithm>
 
 using namespace std;
 
@@ -24,7 +26,7 @@ class Glossaire {
             
             // In case the file did not open
             if (!InputStream.is_open()) {
-                cout << "Cannot open the file. Please check if the file path given is the right one";
+                cerr << "Cannot open the file. Please check if the file path given is the right one";
                 return -1;
             }
 
@@ -45,6 +47,21 @@ class Glossaire {
             return 0;
         }
 
+        // comparator to use for sorting (key,value) pairs by their value
+        static bool comparator(const pair<string, int> &p1, const pair<string, int> &p2) {return p1.second > p2.second;}
+
+        // method that copies the pair value of the unordered map into a vector in order to sort these pairs
+        void sort_results(vector<pair<string, int>> &v) {
+            // clear contents of vector in case if not empty
+            v.clear();
+            // fill vector with map pairs
+            for (auto i:this->map) {
+                v.push_back(i);
+            }
+            // sort vector using the comparator static method
+            sort(v.begin(), v.end(), this->comparator);
+        }
+
         int write_to_output() {
 
             // get the postion of the "." caracter at the end of the input file
@@ -57,12 +74,17 @@ class Glossaire {
             ofstream OutputStream(outut_path);
             // In case the file did not open
             if (!OutputStream.is_open()) {
-                cout << "Cannot create the output file.";
+                cerr << "Cannot create the output file.";
                 return -1;
             }
 
-            for (auto itr=this->map.begin(); itr!=this->map.end(); itr++) {
-                OutputStream << itr->first <<  ", " << itr->second << endl;
+            // create a new vector in order to use it to sort the unordered_map values
+            vector<pair<string, int>> v;
+            this->sort_results(v);
+
+            // write the sorted results inside the output file
+            for (auto i:v) {
+                OutputStream << i.first <<  ", " << i.second << endl;
             }
 
             // Closing file after completion
