@@ -32,14 +32,22 @@ class Glossaire {
 
             // Read each word of the stream
             string word;
+            // A string containing all the characters that we allow a word to have
+            string allowed_chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789éèêàâëûùîçôöü'-";
             while (InputStream >> word) {
-                string key = word;
-                // if the word that is read is not in the unordered map, we add it to it as key with value 0
-                if (this->map.find(key) == this->map.end()) {
-                    this->map[key] == 0;
+
+                // check if 
+                if (word.length()==1 || word.find_first_not_of(allowed_chars)!= string::npos) {
+                    break;
                 }
+
+                // if the word that is read is not in the unordered map, we add it to it as key with value 0
+                if (this->map.find(word) == this->map.end()) {
+                    this->map[word] == 0;
+                }
+
                 // increment the current word count
-                this->map[key]++;
+                this->map[word]++;
             }
 
             // Closing the file after completion
@@ -52,12 +60,15 @@ class Glossaire {
 
         // method that copies the pair value of the unordered map into a vector in order to sort these pairs
         void sort_results(vector<pair<string, int>> &v) {
+            
             // clear contents of vector in case if not empty
             v.clear();
+            
             // fill vector with map pairs
             for (auto i:this->map) {
                 v.push_back(i);
             }
+            
             // sort vector using the comparator static method
             sort(v.begin(), v.end(), this->comparator);
         }
@@ -67,11 +78,13 @@ class Glossaire {
             // get the postion of the "." caracter at the end of the input file
             size_t dot = this->input_path.find_last_of(".");
             string suffix(".table.txt");
+            
             // create the output path by concatenating the input path (minus the extenstion) and the suffix ".table.txt"
             string outut_path = this->input_path.substr(0,dot) + suffix;
             
             // create and open a new file
             ofstream OutputStream(outut_path);
+            
             // In case the file did not open
             if (!OutputStream.is_open()) {
                 cerr << "Cannot create the output file.";
@@ -96,6 +109,7 @@ class Glossaire {
 
 
 int main (int argc, char **argv) {
+    
     // If no file path is passed as an argument to the program
     if (argc == 1) {
         cerr << "No file path has been passed as argument" << endl;
