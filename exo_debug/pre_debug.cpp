@@ -33,7 +33,7 @@ int main()
 
     bubbleSort(arr, n);
     std::cout << "Sorted array: ";
-    // index i can go out of bounds (if i==n)
+    // index i can go out of bounds (in the case i==n)
     for (int i = 0; i <= n; ++i)
     {
         std::cout << arr[i] << " ";
