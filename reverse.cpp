@@ -32,7 +32,7 @@ class Glossaire {
             }
 
             // A string containing all the characters that we allow a word to have
-            string allowed_chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789éèêàâëûùîçôöü-";
+            string allowed_chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789éèêàâëûùîçôöü-'";
 
             // Read each word of the stream
             string word;
@@ -46,18 +46,17 @@ class Glossaire {
                 while (getline(iss, sub_word, '\'')){
 
                     // check if a word is of length less than 2 or if a word contains an unallowed character
-                    if (sub_word.length()==1 || sub_word.find_first_not_of(allowed_chars)!= string::npos) {
-                        break;
+                    if (sub_word.length()!=1 && sub_word.find_first_not_of(allowed_chars)== string::npos) {
+                        
+                        // if the word that is read is not in the unordered map, we add it to it as key with value 0
+                        if (this->map.find(sub_word) == this->map.end()) {
+                            this->map[sub_word] = 0;
+                        }
+
+                        // increment the current word count
+                        this->map[sub_word]++;
                     }
 
-
-                    // if the word that is read is not in the unordered map, we add it to it as key with value 0
-                    if (this->map.find(sub_word) == this->map.end()) {
-                        this->map[sub_word] == 0;
-                    }
-
-                    // increment the current word count
-                    this->map[sub_word]++;
                 }
             }
             // Closing the file after completion
