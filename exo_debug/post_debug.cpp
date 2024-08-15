@@ -42,7 +42,7 @@ int main()
 
     bubbleSort(arr, n);
     std::cout << "Sorted array: ";
-    // change <= by < to avoid getting the index out of bounds    
+    // change <= by < to avoid getting the index out of bounds and accessing out of memory positions    
     for (int i = 0; i < n; ++i)
     {
         std::cout << arr[i] << " ";
