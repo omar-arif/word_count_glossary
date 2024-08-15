@@ -87,6 +87,10 @@ class Glossaire {
         // A method that creates a file based on the input file path and writes the glossary resluts in a formated way ("word, word count" in each line)
         int write_to_output() {
 
+            // get word occurences
+            int status_code = this->get_occurences();
+            if (status_code == -1) {return -1;}
+
             // get the postion of the "." caracter at the end of the input file
             size_t dot = this->input_path.find_last_of(".");
             string suffix(".table.txt");
@@ -139,10 +143,7 @@ int main (int argc, char **argv) {
     // instaciate a Glossaire object
     Glossaire glossary(input_file_path);
 
-    // get word occurences
-    int status_code = glossary.get_occurences();
-    if (status_code == -1) {return -1;}
     // write results in output file
-    status_code = glossary.write_to_output();
+    int status_code = glossary.write_to_output();
     return status_code;
 }
